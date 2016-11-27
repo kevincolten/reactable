@@ -22,32 +22,32 @@ export class Paginator extends React.Component {
 
     renderPrevious() {
         if(this.props.currentPage > 0) {
-            return <a className='reactable-previous-page'
+            return <li key={'prev'}><a className='reactable-previous-page'
                       href={pageHref(this.props.currentPage - 1)}
                       onClick={this.handlePrevious.bind(this)}>
                         {this.props.previousPageLabel || 'Previous'}
-                   </a>
+                   </a></li>
         }
     }
 
     renderNext() {
         if(this.props.currentPage < this.props.numPages - 1) {
-            return <a className='reactable-next-page'
+            return <li key={'next'}><a className='reactable-next-page'
                       href={pageHref(this.props.currentPage + 1)}
                       onClick={this.handleNext.bind(this)}>
                       {this.props.nextPageLabel || 'Next'}
-                   </a>
+                   </a></li>
         }
     }
 
-    renderPageButton(className, pageNum) {
+    renderPageButton(className, pageNum, active) {
 
-        return <a className={className}
+        return <li key={pageNum} className={active}><a className={className}
                   key={pageNum}
                   href={pageHref(pageNum)}
                   onClick={this.handlePageButton.bind(this, pageNum)}>
                   {pageNum + 1}
-              </a>
+              </a></li>
     }
 
     render() {
@@ -74,10 +74,12 @@ export class Paginator extends React.Component {
             let showPageButton = false;
             let pageNum = i;
             let className = "reactable-page-button";
+            let active = '';
             if (currentPage === i) {
+                active = 'active';
                 className += " reactable-current-page";
             }
-            pageButtons.push( this.renderPageButton(className, pageNum));
+            pageButtons.push( this.renderPageButton(className, pageNum, active));
         }
 
         if(currentPage - pageButtonLimit + lowerHalf > 0) {
@@ -96,13 +98,14 @@ export class Paginator extends React.Component {
             <tbody className="reactable-pagination">
                 <tr>
                     <td colSpan={this.props.colSpan}>
-                        {this.renderPrevious()}
-                        {pageButtons}
-                        {this.renderNext()}
+                        <ul className="pagination">
+                            {this.renderPrevious()}
+                            {pageButtons}
+                            {this.renderNext()}
+                        </ul>
                     </td>
                 </tr>
             </tbody>
         );
     }
 };
-
